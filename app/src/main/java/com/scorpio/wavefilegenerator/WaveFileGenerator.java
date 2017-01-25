@@ -18,10 +18,11 @@ public class WaveFileGenerator {
     File wavFile;
     ByteBuffer bbfINT;
     ByteBuffer bbfSHORT;
+
     int sampleRate = 22050;
     int duration = 5;
     int bitsPerSample = 16;
-    int numberOfChannels = 1;
+    int numberOfChannels = 2;
     short shortNumberOfChannels = 2;
     short shortBitsPerSample = 16;
     int intNumberOfSamples = duration * sampleRate;
@@ -30,11 +31,20 @@ public class WaveFileGenerator {
     int subChunk2Size = intNumberOfSamples * numberOfChannels * bitsPerSample / 8;
     int chunkSize = 28 + subChunk2Size;
     short PCM = 1;
+
     byte[] header = new byte[44];
     byte[] intArray = new byte[4];
     byte[] shortArray = new byte[2];
+    byte[] soundData;
+
+    double samples[];
+    short buffer[];
 
     public WaveFileGenerator(int frequency) {
+
+        samples = new double[intNumberOfSamples];
+        buffer = new short[intNumberOfSamples];
+        double note = frequency;
 
         /*chunk id bigendian */
         header[0] = 'R';
@@ -115,21 +125,39 @@ public class WaveFileGenerator {
         header[42] = intArray[2];
         header[43] = intArray[3];
 
+        //generating frequency particular data
+        for (int i = 0; i < intNumberOfSamples; ++i) {
+            samples[i] = Math.sin(2 * Math.PI * i / (sampleRate / note)); // Sine wave
+            buffer[i] = (short) (samples[i] * Short.MAX_VALUE);  // Higher amplitude increases volume
+        }
+
+        soundData = new byte[intNumberOfSamples * 2];
+
+        int i=0;
+        while(i<intNumberOfSamples)
+        {
+            shortArray = shortToByte(buffer[i], true);
+            soundData[i++] = shortArray[0];
+            soundData[i++] = shortArray[1];
+        }
+
+        Log.i("soundData size",""+soundData.length);
+
         try {
-            wavFile = new File(Environment.getExternalStoragePublicDirectory((String)Environment.DIRECTORY_MUSIC), "headerWaveFile.wav");
+            wavFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), "headerWaveFile.wav");
             Log.d("pathcheck", (Environment.getExternalStorageDirectory().toString() + "/headerWaveFile.wav"));
             if (!wavFile.exists()) {
                 wavFile.createNewFile();
             }
-            Log.d("writable","" + wavFile.canWrite() + "");
-            FileOutputStream os = new FileOutputStream(wavFile);
+            Log.d("writable", "" + wavFile.canWrite() + "");
+            FileOutputStream os = new FileOutputStream(wavFile,true);
             BufferedOutputStream bos = new BufferedOutputStream(os);
             DataOutputStream outFile = new DataOutputStream(bos);
-            outFile.write(header, 0, 44);
+            outFile.write(header, 0,44);
+            outFile.write(soundData,0,soundData.length);
             outFile.flush();
             outFile.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
