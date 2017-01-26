@@ -19,17 +19,15 @@ public class WaveFileGenerator {
     ByteBuffer bbfINT;
     ByteBuffer bbfSHORT;
 
-    int sampleRate = 22050;
+    int sampleRate = 44100;
     int duration = 5;
-    int bitsPerSample = 16;
-    int numberOfChannels = 2;
-    short shortNumberOfChannels = 2;
-    short shortBitsPerSample = 16;
+    int bitsPerSample = 16;  short shortBitsPerSample = 16;
+    int numberOfChannels = 2; short shortNumberOfChannels = 2;
     int intNumberOfSamples = duration * sampleRate;
     int byteRate = sampleRate * numberOfChannels * bitsPerSample / 8;
     short blockAlign = 16;
     int subChunk2Size = intNumberOfSamples * numberOfChannels * bitsPerSample / 8;
-    int chunkSize = 28 + subChunk2Size;
+    int chunkSize = 36 + subChunk2Size;
     short PCM = 1;
 
     byte[] header = new byte[44];
@@ -44,7 +42,7 @@ public class WaveFileGenerator {
 
         samples = new double[intNumberOfSamples];
         buffer = new short[intNumberOfSamples];
-        double note = frequency;
+        double note = 0.25*frequency;
 
         /*chunk id bigendian */
         header[0] = 'R';
@@ -137,14 +135,16 @@ public class WaveFileGenerator {
         while(i<intNumberOfSamples)
         {
             shortArray = shortToByte(buffer[i], true);
-            soundData[i++] = shortArray[0];
-            soundData[i++] = shortArray[1];
+            soundData[i] = shortArray[0];
+            i++;
+            soundData[i] = shortArray[1];
+            i++;
         }
 
         Log.i("soundData size",""+soundData.length);
 
         try {
-            wavFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), "headerWaveFile.wav");
+            wavFile = new File(Environment.getExternalStorageDirectory(), "headerWaveFile.wav");
             Log.d("pathcheck", (Environment.getExternalStorageDirectory().toString() + "/headerWaveFile.wav"));
             if (!wavFile.exists()) {
                 wavFile.createNewFile();
