@@ -15,28 +15,28 @@ import java.nio.ByteOrder;
  */
 
 public class WaveFileGenerator {
-    File wavFile;
-    ByteBuffer bbfINT;
-    ByteBuffer bbfSHORT;
+    private File wavFile;
+    private ByteBuffer bbfINT;
+    private ByteBuffer bbfSHORT;
 
-    int sampleRate = 44100;
-    int duration = 5;
-    int bitsPerSample = 16;  short shortBitsPerSample = 16;
-    int numberOfChannels = 2; short shortNumberOfChannels = 2;
-    int intNumberOfSamples = duration * sampleRate;
-    int byteRate = sampleRate * numberOfChannels * bitsPerSample / 8;
-    short blockAlign = 16;
-    int subChunk2Size = intNumberOfSamples * numberOfChannels * bitsPerSample / 8;
-    int chunkSize = 36 + subChunk2Size;
-    short PCM = 1;
+    private int sampleRate = 44100;
+    private int duration = 5;
+    private int bitsPerSample = 16;  private short shortBitsPerSample = 16;
+    private int numberOfChannels = 2; private short shortNumberOfChannels = 2;
+    private int intNumberOfSamples = duration * sampleRate;
+    private int byteRate = sampleRate * numberOfChannels * bitsPerSample / 8;
+    private short blockAlign = 16;
+    private int subChunk2Size = intNumberOfSamples * numberOfChannels * bitsPerSample / 8;
+    private int chunkSize = 36 + subChunk2Size;
+    private short PCM = 1;
 
-    byte[] header = new byte[44];
-    byte[] intArray = new byte[4];
-    byte[] shortArray = new byte[2];
-    byte[] soundData;
+    private byte[] header = new byte[44];
+    private byte[] intArray = new byte[4];
+    private byte[] shortArray = new byte[2];
+    private byte[] soundData;
 
-    double samples[];
-    short buffer[];
+    private double samples[];
+    private short buffer[];
 
     public WaveFileGenerator(int frequency) {
 
@@ -144,7 +144,7 @@ public class WaveFileGenerator {
         Log.i("soundData size",""+soundData.length);
 
         try {
-            wavFile = new File(Environment.getExternalStorageDirectory(), "headerWaveFile.wav");
+            wavFile = new File(Environment.getExternalStorageDirectory(), "wave_"+frequency+".wav");
             Log.d("pathcheck", (Environment.getExternalStorageDirectory().toString() + "/headerWaveFile.wav"));
             if (!wavFile.exists()) {
                 wavFile.createNewFile();
@@ -162,7 +162,7 @@ public class WaveFileGenerator {
         }
     }
 
-    public byte[] intToByte(int i, boolean endian) {
+    private byte[] intToByte(int i, boolean endian) {
         bbfINT = ByteBuffer.allocate(4);
         /*true for little endian*/ /*false for big endian*/
         if (endian) {
@@ -173,7 +173,7 @@ public class WaveFileGenerator {
         return bbfINT.putInt(i).array();
     }
 
-    public byte[] shortToByte(short i, boolean endian) {
+    private byte[] shortToByte(short i, boolean endian) {
         bbfSHORT = ByteBuffer.allocate(2);
         if (endian) {
             bbfSHORT.order(ByteOrder.LITTLE_ENDIAN);
@@ -181,5 +181,10 @@ public class WaveFileGenerator {
         }
         bbfSHORT.order(ByteOrder.BIG_ENDIAN);
         return bbfSHORT.putShort(i).array();
+    }
+
+    public File getWavFile()
+    {
+        return wavFile;
     }
 }

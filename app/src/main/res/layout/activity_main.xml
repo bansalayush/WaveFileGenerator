@@ -14,5 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="enter frequency"
-        android:inputType="number"/>
+        android:inputType="number"
+        android:id="@+id/editFrequency"/>
 </RelativeLayout>
