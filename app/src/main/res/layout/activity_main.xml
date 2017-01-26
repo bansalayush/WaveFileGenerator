@@ -10,10 +10,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.scorpio.wavefilegenerator.MainActivity">
 
-    <EditText
+   <!-- <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="enter frequency"
         android:inputType="number"
-        android:id="@+id/editFrequency"/>
+        android:id="@+id/editFrequency"/>-->
 </RelativeLayout>
