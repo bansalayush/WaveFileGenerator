@@ -20,7 +20,7 @@ public class WaveFileGenerator {
     private ByteBuffer bbfSHORT;
 
     private int sampleRate = 44100;
-    private int duration = 5;
+    private int duration = 10;
     private int bitsPerSample = 16;  private short shortBitsPerSample = 16;
     private int numberOfChannels = 2; private short shortNumberOfChannels = 2;
     private int intNumberOfSamples = duration * sampleRate;
@@ -129,7 +129,7 @@ public class WaveFileGenerator {
             buffer[i] = (short) (samples[i] * Short.MAX_VALUE);  // Higher amplitude increases volume
         }
 
-        soundData = new byte[intNumberOfSamples * 2];
+        soundData = new byte[intNumberOfSamples];
 
         int i=0;
         while(i<intNumberOfSamples)
