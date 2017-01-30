@@ -68,11 +68,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
+   /* @Override
     protected void onDestroy() {
         super.onDestroy();
+        f.delete();
 
-    }
+
+    }*/
 
     public void onStop(View v)
     {

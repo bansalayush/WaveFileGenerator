@@ -25,7 +25,7 @@ public class WaveFileGenerator {
     private int numberOfChannels = 2; private short shortNumberOfChannels = 2;
     private int intNumberOfSamples = duration * sampleRate;
     private int byteRate = sampleRate * numberOfChannels * bitsPerSample / 8;
-    private short blockAlign = 16;
+    private short blockAlign = 4;/* numberOfChannels*bitsPerSample/8 */
     private int subChunk2Size = intNumberOfSamples * numberOfChannels * bitsPerSample / 8;
     private int chunkSize = 36 + subChunk2Size;
     private short PCM = 1;
@@ -134,7 +134,7 @@ public class WaveFileGenerator {
         int i=0;
         while(i<intNumberOfSamples)
         {
-            shortArray = shortToByte(buffer[i], true);
+            shortArray = shortToByte(buffer[i], true);//little endian
             soundData[i] = shortArray[0];
             i++;
             soundData[i] = shortArray[1];
@@ -144,8 +144,8 @@ public class WaveFileGenerator {
         Log.i("soundData size",""+soundData.length);
 
         try {
-            wavFile = new File(Environment.getExternalStorageDirectory(), "wave_"+frequency+".wav");
-            Log.d("pathcheck", (Environment.getExternalStorageDirectory().toString() + "/headerWaveFile.wav"));
+            wavFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), "wave_"+frequency+".wav");
+            Log.d("pathcheck", (wavFile.getAbsolutePath()));
             if (!wavFile.exists()) {
                 wavFile.createNewFile();
             }
