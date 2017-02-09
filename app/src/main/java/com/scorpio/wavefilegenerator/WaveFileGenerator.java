@@ -27,7 +27,7 @@ public class WaveFileGenerator {
     private int byteRate = sampleRate * numberOfChannels * bitsPerSample / 8;
     private short blockAlign = 4;/* numberOfChannels*bitsPerSample/8 */
     private int subChunk2Size = intNumberOfSamples * numberOfChannels * bitsPerSample / 8;
-    private int chunkSize = /*36 + subChunk2Size *//*trying a different formulae*/ subChunk2Size/*http://duc.avid.com/showthread.php?t=232362*/;
+    private int chunkSize = 36 + subChunk2Size /*trying a different formulae subChunk2Size/*http://duc.avid.com/showthread.php?t=232362*/;
     private short PCM = 1;
 
     private byte[] header = new byte[44];
